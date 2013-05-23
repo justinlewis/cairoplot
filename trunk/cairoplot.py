@@ -289,7 +289,7 @@ class ScatterPlot( Plot ):
                  x_labels = None,
                  y_labels = None,
                  x_formatter = None,
-                 Y_formatter = None,
+                 y_formatter = None,
                  x_bounds = None,
                  y_bounds = None,
                  z_bounds = None,
@@ -1123,12 +1123,15 @@ class HorizontalBarPlot(BarPlot):
                  y_labels = None,
                  x_bounds = None,
                  y_bounds = None,
-                 series_colors = None):
+                 series_colors = None,
+                 value_formatter = None):
 
         BarPlot.__init__(self, surface, data, width, height, background, border, 
                          display_values, grid, rounded_corners, stack, three_dimension,
                          x_labels, y_labels, x_bounds, y_bounds, series_colors, HORZ)
         self.series_labels = series_labels
+        self.value_formatter = value_formatter or str
+        
 
     def calc_vert_extents(self):
         self.calc_extents(VERT)
@@ -1222,19 +1225,21 @@ class HorizontalBarPlot(BarPlot):
         if self.stack:
             for i,group in enumerate(self.series):
                 value = sum(group.to_list())
-                height = self.context.text_extents(str(value))[3]
+                strvalue = self.value_formatter(value)
+                height = self.context.text_extents(strvalue)[3]
                 x = self.borders[HORZ] + value*self.steps[HORZ] + 2
                 y = self.borders[VERT] + (i+0.5)*self.steps[VERT] + (i+1)*self.space + height/2
                 self.context.move_to(x, y)
-                self.context.show_text(str(value))
+                self.context.show_text(strvalue) 
         else:
             for i,group in enumerate(self.series):
                 inner_step = self.steps[VERT]/len(group)
                 y0 = self.border + i*self.steps[VERT] + (i+1)*self.space
                 for number,data in enumerate(group):
-                    height = self.context.text_extents(str(data.content))[3]
+                    strvalue = self.value_formatter(data.content)
+                    height = self.context.text_extents(strvalue)[3]
                     self.context.move_to(self.borders[HORZ] + data.content*self.steps[HORZ] + 2, y0 + 0.5*inner_step + height/2, )
-                    self.context.show_text(str(data.content))
+                    self.context.show_text(strvalue) 
                     y0 += inner_step
 
     def render_plot(self):
@@ -1302,6 +1307,7 @@ class VerticalBarPlot(BarPlot):
                          display_values, grid, rounded_corners, stack, three_dimension,
                          x_labels, y_labels, x_bounds, y_bounds, series_colors, VERT)
         self.series_labels = series_labels
+        self.value_formatter = value_formatter or str
 
     def calc_vert_extents(self):
         self.calc_extents(VERT)
@@ -2286,7 +2292,8 @@ def horizontal_bar_plot(name,
                        y_labels = None, 
                        x_bounds = None, 
                        y_bounds = None,
-                       colors = None):
+                       colors = None,
+                       value_formatter = None):
 
     #TODO: Fix docstring for horizontal_bar_plot
     '''
@@ -2309,6 +2316,7 @@ def horizontal_bar_plot(name,
         x_labels, y_labels - lists of strings containing the horizontal and vertical labels for the axis;
         x_bounds, y_bounds - tuples containing the lower and upper value bounds for the data to be plotted;
         colors - List containing the colors expected for each of the bars.
+        value_formatter - if present, this function will be called with the value, and the string it returns will be used 
 
         - Example of use
 
@@ -2318,7 +2326,7 @@ def horizontal_bar_plot(name,
     
     plot = HorizontalBarPlot(name, data, width, height, background, border, 
                              display_values, grid, rounded_corners, stack, three_dimension, 
-                             series_labels, x_labels, y_labels, x_bounds, y_bounds, colors)
+                             series_labels, x_labels, y_labels, x_bounds, y_bounds, colors, value_formatter)
     plot.render()
     plot.commit()
 
