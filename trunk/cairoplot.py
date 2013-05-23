@@ -2246,7 +2246,7 @@ def vertical_bar_plot(name,
         - Function to generate vertical Bar Plot Charts.
 
         bar_plot(name, data, width, height, background, border, grid, rounded_corners, three_dimension, 
-                 x_labels, y_labels, x_bounds, y_bounds, colors):
+                 x_labels, y_labels, x_bounds, y_bounds, colors, value_formatter):
 
         - Parameters
         
@@ -2300,7 +2300,7 @@ def horizontal_bar_plot(name,
         - Function to generate Horizontal Bar Plot Charts.
 
         bar_plot(name, data, width, height, background, border, grid, rounded_corners, three_dimension, 
-                 x_labels, y_labels, x_bounds, y_bounds, colors):
+                 x_labels, y_labels, x_bounds, y_bounds, colors, value_formatter):
 
         - Parameters
         

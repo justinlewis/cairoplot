@@ -5,6 +5,7 @@ This fork will attempt to incorporate the changes made by Michael Rooney.
 Specifically this includes the changes in revision 47, 48, 49, and 50 of this branch: https://code.launchpad.net/~mrooney/cairoplot/label-formatters
 
 As of May 2, 2013 all changes have been incorporated. 
+
 As of May 23, 2013 the equivilent changes have been applied to horizontal bar charts.  
 
 Light testing proved the improvements functional for vertical and horizontal bar charts!
