@@ -10,4 +10,4 @@ As of May 23, 2013 the equivilent changes have been applied to horizontal bar ch
 
 Light testing proved the improvements functional for vertical and horizontal bar charts!
 
-HOWEVER, tests on some other charts failed the test.py script found in trunk.  
+HOWEVER, tests on some other charts failed the test.py script found in trunk.  See test.py in trunk for details.
