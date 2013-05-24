@@ -1,13 +1,10 @@
-
 Goal for this branch:
 
-	The goal is to allow custom formatting of bar chart labels.  For example, adding % to a the label above each bar. Michael Rooney has achieved this on 
-a previous version of Cairoplot but the changes where never merged with the master branch. This fork will attempt to incorporate the changes made by Michael Rooney.  
-Specifically this includes the changes in revision 47, 48, 49, and 50 of this branch: https://code.launchpad.net/~mrooney/cairoplot/label-formatters
+	The goal is to allow custom formatting of bar chart labels.  For example, adding % to a the label above each bar. Michael Rooney has achieved this on a previous version of Cairoplot but the changes where never merged with the master branch. This fork will attempt to incorporate the changes made by Michael Rooney.  Specifically this includes the changes in revision 47, 48, 49, and 50 of this branch: https://code.launchpad.net/~mrooney/cairoplot/label-formatters
 
 About Cairoplot:
 
-	CairoPlot is a Python based charting library created and maintained by Rodrigo Araújo (https://github.com/rodrigoaraujo01).  
+	CairoPlot is a Python based charting library created and maintained by Rodrigo Araï¿½jo (https://github.com/rodrigoaraujo01).  
 
 
 Status:
