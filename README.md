@@ -1,14 +1,20 @@
 Goal for this branch:
 
-	The goal is to allow custom formatting of bar chart labels.  For example, adding % to a the label above each bar. 
-	Michael Rooney has achieved this on a previous version of Cairoplot but the changes where never merged with the master branch. 
-	This fork will attempt to incorporate the changes made by Michael Rooney.  Specifically this includes the changes 
-	in revision 47, 48, 49, and 50 of this branch: https://code.launchpad.net/~mrooney/cairoplot/label-formatters
+	The goal is to allow custom formatting of bar chart labels.  For example, adding % to a the label 
+	above each bar. Michael Rooney has achieved this on a previous version of Cairoplot but the changes 
+	where never merged with the master branch. This fork will attempt to incorporate the changes made by 
+	Michael Rooney.  Specifically this includes the changes in revision 47, 48, 49, and 50 of this 
+	branch: https://code.launchpad.net/~mrooney/cairoplot/label-formatters
 
 About Cairoplot:
 
-	CairoPlot is a Python based charting library created and maintained by Rodrigo Ara�jo (https://github.com/rodrigoaraujo01).  
+	CairoPlot is a Python based charting library created and maintained by Rodrigo Araujo 
+	(https://github.com/rodrigoaraujo01).  
 
+Important Notes:
+
+	Support for Python >= 2.7 OrderedDict() data type was added requiring the collections module to be 
+	imported. Add "from collections import OrderedDict" to your script.
 
 Status:
 
@@ -20,3 +26,5 @@ Light testing proved the improvements functional for vertical and horizontal bar
 
 HOWEVER, tests on some dot line plots and all scatter plots failed the tests.py script found in trunk. 
   * See test.py in trunk for details.
+  
+
