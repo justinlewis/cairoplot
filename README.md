@@ -15,6 +15,9 @@ Important Notes:
 
 	Support for Python >= 2.7 OrderedDict() data type was added requiring the collections module to be 
 	imported. Add "from collections import OrderedDict" to your script.
+		* This is useful if you want to maintain the same color for each wedge in a pie plot while
+		inputing a dictionary for many output files. The order of the dictionary elements is important
+		to maintain consistency in wedge color accross different output charts.
 
 Status:
 
