@@ -26,6 +26,7 @@
 
 #import cairoplot
 import doctest
+from collections import OrderedDict
 
 NUMTYPES = (int, float, long)
 LISTTYPES = (list, tuple)
@@ -1044,10 +1045,18 @@ class Series(object):
             elif type(series) in NUMTYPES or isinstance(series, Group) or isinstance(series, Data):
                 self.__group_list = []
                 self.add_group(series)
+
+            # OrderedDict representing series of groups
+            ## This OrderedDict is a subclass collection available in Python >= 2.7
+            elif issubclass(type(series), OrderedDict):
+                self.__group_list = []
+                names = series.keys()              
+                for name in names:
+                    self.add_group(Group(series[name],name,self))
                 
             # Default
             else:
-                raise TypeError, "Serie type not supported"
+                raise TypeError, "Series type not supported"
 
         return property(**locals())
     
