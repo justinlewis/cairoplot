@@ -25,7 +25,7 @@ Important Notes:
 	Added support for negative values on vertical bar plots (warning: hackish and probably buggy):
 
 
-![alt tag](https://raw.github.com/justinlewis/cairoplot/master/trunk/examples/neg_value_vertical_bar_example.png)
+![alt tag](/examples/neg_value_vertical_bar_example.png)
 
 
 Status:
