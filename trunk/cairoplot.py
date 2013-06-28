@@ -40,14 +40,19 @@ HORZ = 0
 VERT = 1
 NORM = 2
 
-COLORS = {"red"    : (1.0,0.0,0.0,1.0), "lime"    : (0.0,1.0,0.0,1.0), "blue"   : (0.0,0.0,1.0,1.0),
+COLORS = {"comm_prof_blue"  : (0.55,0.65,0.87,1.0), "comm_prof_yellow"  : (1.0,0.8,0.0,1.0),
+          "comm_prof_green" : (0.8,1.0,0.4,1.0),    "comm_prof_orange"  : (1.0,0.6,0.19,1.0),
+          "comm_prof_purple"    : (0.8,0.4,0.8,1.0),    "comm_prof_red" : (1.0,0.4,0.4,1.0),
+          "red"    : (1.0,0.0,0.0,1.0), "lime"    : (0.0,1.0,0.0,1.0), "blue"   : (0.0,0.0,1.0,1.0),
           "maroon" : (0.5,0.0,0.0,1.0), "green"   : (0.0,0.5,0.0,1.0), "navy"   : (0.0,0.0,0.5,1.0),
           "yellow" : (1.0,1.0,0.0,1.0), "magenta" : (1.0,0.0,1.0,1.0), "cyan"   : (0.0,1.0,1.0,1.0),
           "orange" : (1.0,0.5,0.0,1.0), "white"   : (1.0,1.0,1.0,1.0), "black"  : (0.0,0.0,0.0,1.0),
           "gray" : (0.5,0.5,0.5,1.0), "light_gray" : (0.9,0.9,0.9,1.0),
           "transparent" : (0.0,0.0,0.0,0.0)}
 
-THEMES = {"black_red"         : [(0.0,0.0,0.0,1.0), (1.0,0.0,0.0,1.0)],
+THEMES = {"comm_prof_theme"   : [(1.0,0.8,0.0,1.0), (0.55,0.65,0.87,1.0), (1.0,0.4,0.4,1.0), (0.8,0.4,0.8,1.0),(0.8,1.0,0.4,1.0)],
+          "black_red"         : [(0.0,0.0,0.0,1.0), (1.0,0.0,0.0,1.0)],
+          "force_5"           : [(1.0,0.0,0.0,1.0), (1.0,0.5,0.0,1.0), (1.0,1.0,0.0,1.0), (0.0,1.0,0.0,1.0), (0.0,0.0,1.0,1.0)],
           "red_green_blue"    : [(1.0,0.0,0.0,1.0), (0.0,1.0,0.0,1.0), (0.0,0.0,1.0,1.0)],
           "red_orange_yellow" : [(1.0,0.2,0.0,1.0), (1.0,0.7,0.0,1.0), (1.0,1.0,0.0,1.0)],
           "yellow_orange_red" : [(1.0,1.0,0.0,1.0), (1.0,0.7,0.0,1.0), (1.0,0.2,0.0,1.0)],
@@ -945,7 +950,8 @@ class BarPlot(Plot):
                 max_data_value = max(sum(group.to_list()) for group in self.series)
             else:
                 max_data_value = max(max(group.to_list()) for group in self.series)
-            self.bounds[self.main_dir] = (0, max_data_value)
+                min_data_value = min(min(group.to_list()) for group in self.series) ## added by jl
+            self.bounds[self.main_dir] = (min(0, min_data_value), max_data_value) ## min(0, min_data_value) was added by jl. was just 0.
         if not self.bounds[other_direction(self.main_dir)]:
             self.bounds[other_direction(self.main_dir)] = (0, len(self.series))
     
@@ -995,6 +1001,8 @@ class BarPlot(Plot):
     def render(self):
         self.calc_all_extents()
         self.calc_steps()
+        if self.bounds[VERT][0] < 0:
+           self.plot_top += self.bounds[VERT][0] * self.steps[VERT]
         self.render_background()
         self.render_bounding_box()
         if self.grid:
@@ -1028,6 +1036,8 @@ class BarPlot(Plot):
         self.context.close_path()
                 
     def draw_round_rectangle(self, x0, y0, x1, y1):
+        if y0 > y1: ## added by jl
+            y0, y1 = y1, y0 ## added by jl
         self.context.arc(x0+5, y0+5, 5, -math.pi, -math.pi/2)
         self.context.line_to(x1-5, y0)
         self.context.arc(x1-5, y0+5, 5, -math.pi/2, 0)
@@ -1352,7 +1362,8 @@ class VerticalBarPlot(BarPlot):
         else:
             lines = 11
             vertical_step = float(self.plot_dimensions[self.main_dir])/(lines-1)
-            y = 1.2*self.border + self.value_label
+##            y = 1.2*self.border + self.value_label  ## commented by jl
+            y = 1.2*self.border + self.value_label + self.bounds[VERT][0]*self.steps[VERT] ## added by JL
         for x in xrange(0, lines):
             self.context.move_to(self.borders[HORZ], y)
             self.context.line_to(self.dimensions[HORZ] - self.border, y)
@@ -1399,6 +1410,7 @@ class VerticalBarPlot(BarPlot):
             y += step
         self.labels[VERT].reverse()
 
+    ## rendering bar labels
     def render_values(self):
         self.context.set_source_rgba(*self.value_label_color)
         self.context.set_font_size(self.font_size * 0.8)
@@ -1418,7 +1430,14 @@ class VerticalBarPlot(BarPlot):
                 for number,data in enumerate(group):
                     strvalue = self.value_formatter(data.content)
                     width = self.context.text_extents(strvalue)[2]
-                    self.context.move_to(x0 + 0.5*inner_step - width/2, self.plot_top - data.content*self.steps[VERT] - 2)
+                    ## If negative value bars cause conflict uncomment this and comment the next if statement below
+                    ##self.context.move_to(x0 + 0.5*inner_step - width/2, self.plot_top - data.content*self.steps[VERT] - 2)
+                    negative_value_correction = 0
+                    if data.content < 0:
+                        negative_value_correction = (inner_step - 13) + data.content #(data.content*self.steps[VERT] + (data.content-20))
+                        ## this sets labels at 0 axis 
+                        ##negative_value_correction = data.content*self.steps[VERT]                     
+                    self.context.move_to(x0 + 0.5*inner_step - width/2, self.plot_top - data.content*self.steps[VERT] - 2 + negative_value_correction)
                     self.context.show_text(strvalue)
                     x0 += inner_step
 
@@ -1711,7 +1730,6 @@ class PiePlot(Plot):
         for number,key in enumerate(self.series_labels):
             # self.data[number] should be just a number
             data = sum(self.series[number].to_list())
-            
             next_angle = angle + 2.0*math.pi*data/self.total
             cr.set_source_rgba(*self.series_colors[number][:4])
             w = cr.text_extents(key)[2]
