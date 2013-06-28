@@ -5,6 +5,9 @@ Goal for this branch:
 	where never merged with the master branch. This fork will attempt to incorporate the changes made by 
 	Michael Rooney.  Specifically this includes the changes in revision 47, 48, 49, and 50 of this 
 	branch: https://code.launchpad.net/~mrooney/cairoplot/label-formatters
+	
+	The more I use CairoPlot the more I seem to make modifications to the library.  This branch has had
+	numersous small modifications to it.  Please review the revision history if needed.
 
 About Cairoplot:
 
@@ -18,6 +21,11 @@ Important Notes:
 		* This is useful if you want to maintain the same color for each wedge in a pie plot while
 		inputing a dictionary for many output files. The order of the dictionary elements is important
 		to maintain consistency in wedge color accross different output charts.
+		
+	Added support for negative values on vertical bar plots (warning: hackish and probably buggy):
+
+	![alt tag](https://raw.github.com/justinlewis/cairoplot/master/trunk/examples/neg_value_vertical_bar_example.png)
+
 
 Status:
 
@@ -29,5 +37,7 @@ Light testing proved the improvements functional for vertical and horizontal bar
 
 HOWEVER, tests on some dot line plots and all scatter plots failed the tests.py script found in trunk. 
   * See test.py in trunk for details.
+  
+
   
 
