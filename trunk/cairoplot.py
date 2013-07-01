@@ -948,6 +948,7 @@ class BarPlot(Plot):
         if not self.bounds[self.main_dir]:
             if self.stack:
                 max_data_value = max(sum(group.to_list()) for group in self.series)
+                min_data_value = min(min(group.to_list()) for group in self.series)
             else:
                 max_data_value = max(max(group.to_list()) for group in self.series)
                 min_data_value = min(min(group.to_list()) for group in self.series) ## added by jl
