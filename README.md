@@ -1,4 +1,5 @@
 Instalation:
+	
 	Copy cairoplot.py and series.py to <YourPythonRoot>/Lib
 
 
