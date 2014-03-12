@@ -1,7 +1,23 @@
-Instalation:
-	
-	Copy cairoplot.py and series.py to <YourPythonRoot>/Lib
+CairoPlot Install (windows - python 2.7 32bit):
 
+	The official install docs:  http://cairoplot.sourceforge.net/tutorials.html
+	
+	What I needed to do:
+	
+		Copy cairoplot.py and series.py to <YourPythonRoot>/Lib
+	
+Dependancies (windows - python 2.7 32bit):
+	
+	zlib 
+		1. dowonload zlib http://www.gtk.org/download/win32.php 
+		2. copy the zlib directory to <YourPythonRoot>/Lib
+		3. rename the directory to 'zlib'
+		4. test the module in the python console with 'import zlib'
+	
+	Cairo (the easy way)
+
+		1. download the PyGTK All in One installer and run it:  http://ftp.gnome.org/pub/GNOME/binaries/win32/pygtk/2.24/
+	
 
 Goal for this branch:
 
