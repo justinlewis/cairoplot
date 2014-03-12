@@ -15,7 +15,6 @@ Dependancies (windows - python 2.7 32bit):
 		4. test the module in the python console with 'import zlib'
 	
 	Cairo (the easy way)
-
 		1. download the PyGTK All in One installer and run it:  http://ftp.gnome.org/pub/GNOME/binaries/win32/pygtk/2.24/
 	
 
