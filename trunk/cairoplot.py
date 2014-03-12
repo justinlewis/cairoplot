@@ -50,7 +50,7 @@ COLORS = {"comm_prof_blue"  : (0.55,0.65,0.87,1.0), "comm_prof_yellow"  : (1.0,0
           "gray" : (0.5,0.5,0.5,1.0), "light_gray" : (0.9,0.9,0.9,1.0),
           "transparent" : (0.0,0.0,0.0,0.0)}
 
-THEMES = {"comm_prof_theme"   : [(1.0,0.8,0.0,1.0), (0.55,0.65,0.87,1.0), (1.0,0.4,0.4,1.0), (0.8,0.4,0.8,1.0),(0.8,1.0,0.4,1.0)],
+THEMES = {"comm_prof_theme"   : [(1.0,0.6,0.19,1.0), (0.55,0.65,0.87,1.0), (1.0,0.4,0.4,1.0), (0.8,0.4,0.8,1.0),(1.0,0.8,0.0,1.0),(0.8,1.0,0.4,1.0)],
           "black_red"         : [(0.0,0.0,0.0,1.0), (1.0,0.0,0.0,1.0)],
           "force_5"           : [(1.0,0.0,0.0,1.0), (1.0,0.5,0.0,1.0), (1.0,1.0,0.0,1.0), (0.0,1.0,0.0,1.0), (0.0,0.0,1.0,1.0)],
           "red_green_blue"    : [(1.0,0.0,0.0,1.0), (0.0,1.0,0.0,1.0), (0.0,0.0,1.0,1.0)],
@@ -123,7 +123,7 @@ class Plot(object):
         self.labels[HORZ] = x_labels
         self.labels[VERT] = y_labels
         self.load_series(data, x_labels, y_labels, series_colors)
-        self.font_size = 10
+        self.font_size = 12
         self.set_background (background)
         self.border = border
         self.borders = {}
@@ -950,17 +950,18 @@ class BarPlot(Plot):
                 max_data_value = max(sum(group.to_list()) for group in self.series)
                 min_data_value = min(min(group.to_list()) for group in self.series)
             else:
-                max_data_value = max(max(group.to_list()) for group in self.series)
-                min_data_value = min(min(group.to_list()) for group in self.series) ## added by jl
+                max_data_value = max(max(group.to_list()) for group in self.series) + 3  ## "+3 added by jl to expand height and prevent label cllision with image edge"
+                min_data_value = min(min(group.to_list()) for group in self.series)  ## added by jl
             self.bounds[self.main_dir] = (min(0, min_data_value), max_data_value) ## min(0, min_data_value) was added by jl. was just 0.
         if not self.bounds[other_direction(self.main_dir)]:
-            self.bounds[other_direction(self.main_dir)] = (0, len(self.series))
+            self.bounds[other_direction(self.main_dir)] = (0, len(self.series)) 
     
     def calc_extents(self, direction):
         self.max_value[direction] = 0
         if self.labels[direction]:
-            widest_word = max(self.labels[direction], key = lambda item: self.context.text_extents(item)[2])
-            self.max_value[direction] = self.context.text_extents(widest_word)[3 - direction]
+            widest_word = max(self.labels[direction], key = lambda item: self.context.text_extents(item)[2]) 
+            widest_word = widest_word + "      "   ## added this whole line (hackish) to fix label collision on horizontal bar charts
+            self.max_value[direction] = self.context.text_extents(widest_word)[3 - direction] + 4  ## "+3 added by jl to expand bottom and prevent label cllision with image edge"
             self.borders[other_direction(direction)] = (2-direction)*self.max_value[direction] + self.border + direction*(5)
         else:
             self.borders[other_direction(direction)] = self.border
@@ -1435,7 +1436,8 @@ class VerticalBarPlot(BarPlot):
                     ##self.context.move_to(x0 + 0.5*inner_step - width/2, self.plot_top - data.content*self.steps[VERT] - 2)
                     negative_value_correction = 0
                     if data.content < 0:
-                        negative_value_correction = (inner_step - 13) + data.content #(data.content*self.steps[VERT] + (data.content-20))
+						#(data.content*self.steps[VERT] + (data.content-20))
+                        negative_value_correction = (inner_step) + data.content  ## changed (inner_step - 13) to (inner_step) for negative bar label placement jl
                         ## this sets labels at 0 axis 
                         ##negative_value_correction = data.content*self.steps[VERT]                     
                     self.context.move_to(x0 + 0.5*inner_step - width/2, self.plot_top - data.content*self.steps[VERT] - 2 + negative_value_correction)
@@ -1689,7 +1691,7 @@ class PiePlot(Plot):
         Plot.__init__( self, surface, data, width, height, background, series_colors = colors )
         self.center = (self.dimensions[HORZ]/2, self.dimensions[VERT]/2)
         self.total = sum( self.series.to_list() )
-        self.radius = min(self.dimensions[HORZ]/3,self.dimensions[VERT]/3)
+        self.radius = min(self.dimensions[HORZ]/3,self.dimensions[VERT]/3)  ## changed from 3's to 4's by jl to allow more room for labels
         self.gradient = gradient
         self.shadow = shadow
     
